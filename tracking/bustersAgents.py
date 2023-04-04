@@ -154,8 +154,9 @@ class GreedyBustersAgent(BustersAgent):
         for g in range(len(livingGhosts)):
             infMod = self.inferenceModules[g]
             infMod.elapseTime(gameState)
-            infMod.observe(observation, gameState)
+            infMod.observe(gameState)
             livingGhostPositionDistributions[g] = infMod.beliefs
+            
             mostLikelyPos = max(livingGhostPositionDistributions[g], key = livingGhostPositionDistributions[g].get)
             if self.distancer.getDistance(pacmanPosition, mostLikelyPos) < closestGhostDist:
                 closestGhostDist = self.distancer.getDistance(pacmanPosition, mostLikelyPos)
