@@ -593,7 +593,15 @@ class ExactInference(InferenceModule):
         current position is known.
         """
         "*** YOUR CODE HERE ***"
-        raiseNotDefined()
+        distDict = {}
+        for oldPos in self.allPositions:
+            distDict[oldPos] =  self.getPositionDistribution(gameState, oldPos)
+        oldBeliefs = self.beliefs.copy()
+        for pos in self.allPositions:
+            summ = 0
+            for oldPos in distDict.keys():
+                summ += distDict[oldPos][pos] * oldBeliefs[oldPos]
+            self.beliefs[pos] = summ
         "*** END YOUR CODE HERE ***"
 
     def getBeliefDistribution(self):
@@ -625,7 +633,11 @@ class ParticleFilter(InferenceModule):
         """
         self.particles = []
         "*** YOUR CODE HERE ***"
-        raiseNotDefined()
+        # numEach = self.numParticles % 
+        # for pos in self.legalPositions:
+        #     for i in range(numEach):
+        #         self.particles.append(pos)
+
         "*** END YOUR CODE HERE ***"
 
     def getBeliefDistribution(self):
