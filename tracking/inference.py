@@ -633,10 +633,10 @@ class ParticleFilter(InferenceModule):
         """
         self.particles = []
         "*** YOUR CODE HERE ***"
-        # numEach = self.numParticles % 
-        # for pos in self.legalPositions:
-        #     for i in range(numEach):
-        #         self.particles.append(pos)
+        numEach = self.numParticles // len(self.legalPositions)
+        for pos in self.legalPositions:
+            for i in range(numEach):
+                self.particles.append(pos)
 
         "*** END YOUR CODE HERE ***"
 
@@ -649,7 +649,12 @@ class ParticleFilter(InferenceModule):
         This function should return a normalized distribution.
         """
         "*** YOUR CODE HERE ***"
-        raiseNotDefined()
+        belief = DiscreteDistribution()
+        for pos in self.legalPositions:
+            # belief[pos] = len([i for i in self.particles if i[1] == pos])
+            belief[pos] = self.particles.count(pos)
+        belief.normalize()
+        return belief
         "*** END YOUR CODE HERE ***"
     
     ########### ########### ###########
@@ -669,7 +674,19 @@ class ParticleFilter(InferenceModule):
         the DiscreteDistribution may be useful.
         """
         "*** YOUR CODE HERE ***"
-        raiseNotDefined()
+        weights = DiscreteDistribution()
+        for p in self.particles:
+            prob = self.getObservationProb(observation, gameState.getPacmanPosition(), p, self.getJailPosition())
+            if weights.get(p) == 0:
+                weights[p] = prob
+            else:
+                weights[p] += prob
+        if weights.total() == 0:
+            self.initializeUniformly(gameState)
+        else:
+            weights.normalize()
+            for i in range(len(self.particles)):
+                self.particles[i] = weights.sample()
         "*** END YOUR CODE HERE ***"
     
     ########### ########### ###########
@@ -682,5 +699,14 @@ class ParticleFilter(InferenceModule):
         gameState.
         """
         "*** YOUR CODE HERE ***"
-        raiseNotDefined()
+        dists = DiscreteDistribution()
+        newParticles = []
+        for p in self.particles:
+            if dists.get(p) == None:
+                newPosDist = self.getPositionDistribution(gameState, p)
+                dists[p] = newPosDist
+            newParticles.append(dists.get(p).sample())
+        self.particles = newParticles
+            
+
         "*** END YOUR CODE HERE ***"

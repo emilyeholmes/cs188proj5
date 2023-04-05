@@ -155,7 +155,7 @@ class GreedyBustersAgent(BustersAgent):
                 mostLikelyPos = max(livingGhostPositionDistributions[g], key = livingGhostPositionDistributions[g].get)
                 if self.distancer.getDistance(pacmanPosition, mostLikelyPos) < closestGhostDist:
                     closestGhostDist = self.distancer.getDistance(pacmanPosition, mostLikelyPos)
-                    closest = mostLikelyPoss
+                    closest = mostLikelyPos
 
         bestAction = None
         minDist = float("inf")
