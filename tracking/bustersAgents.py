@@ -151,22 +151,17 @@ class GreedyBustersAgent(BustersAgent):
         "*** YOUR CODE HERE ***"
         closestGhostDist = float("inf")
         closest = 0
-        for g in range(len(livingGhosts)):
-            infMod = self.inferenceModules[g]
-            infMod.elapseTime(gameState)
-            infMod.observe(gameState)
-            livingGhostPositionDistributions[g] = infMod.beliefs
-            
-            mostLikelyPos = max(livingGhostPositionDistributions[g], key = livingGhostPositionDistributions[g].get)
-            if self.distancer.getDistance(pacmanPosition, mostLikelyPos) < closestGhostDist:
-                closestGhostDist = self.distancer.getDistance(pacmanPosition, mostLikelyPos)
-                closest = mostLikelyPos
+        for g in range(len(livingGhostPositionDistributions)):
+                mostLikelyPos = max(livingGhostPositionDistributions[g], key = livingGhostPositionDistributions[g].get)
+                if self.distancer.getDistance(pacmanPosition, mostLikelyPos) < closestGhostDist:
+                    closestGhostDist = self.distancer.getDistance(pacmanPosition, mostLikelyPos)
+                    closest = mostLikelyPoss
 
         bestAction = None
         minDist = float("inf")
         for action in legal:
             successorPosition = Actions.getSuccessor(pacmanPosition, action)
-            if self.distancer.getDistance(successorPosition, mostLikelyPos) < minDist:
+            if self.distancer.getDistance(successorPosition, mostLikelyPos) <= minDist:
                 bestAction = action
                 minDist = self.distancer.getDistance(successorPosition, mostLikelyPos)
         return bestAction
